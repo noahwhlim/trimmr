@@ -19,4 +19,5 @@ COPY server/ ./server
 COPY --from=frontend-build /app/client/dist ./client_dist
 
 # Expose port and start FastAPI
+EXPOSE 80
 CMD ["uvicorn", "server.main:app", "--host", "0.0.0.0", "--port", "80"]
