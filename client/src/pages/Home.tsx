@@ -12,17 +12,15 @@ import "../App.css";
 import React, { useState } from "react";
 import { submitLink } from "@/api/submitLink";
 
-
 export default function Home() {
   const [longUrl, setLongUrl] = useState("");
-  const [trimmedUrl, setTrimmedUrl] = useState("https://www.trimmr.dev/short");
+  const [trimmedUrl, setTrimmedUrl] = useState("trimmr.dev/short");
 
   const handleInputChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setLongUrl(event.target.value);
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
@@ -46,13 +44,18 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <form className="flex flex-col sm:flex-row gap-3">
-              <Input
-                type="url"
-                placeholder="https://example.com/very/long/url"
-                className="flex-1"
-                value={longUrl}
-                onChange={handleInputChange}
-              />
+              <div className="flex-1 flex">
+                <div className="flex items-center px-3 bg-slate-100 dark:bg-slate-800 border border-r-0 rounded-l-md text-sm text-muted-foreground">
+                  https://
+                </div>
+                <Input
+                  type="url"
+                  placeholder="example.com/very/long/url"
+                  className="flex-1 rounded-l-none border-l-0 focus:ring-offset-0"
+                  value={longUrl}
+                  onChange={handleInputChange}
+                />
+              </div>
               <Button
                 type="submit"
                 className="bg-teal-500 hover:bg-teal-600 cursor-pointer"
@@ -60,7 +63,7 @@ export default function Home() {
                   e.preventDefault();
                   try {
                     const response = await submitLink(longUrl);
-                    setTrimmedUrl("https://www.trimmr.dev/" + response.id); // Assuming the response has a shortUrl property
+                    setTrimmedUrl("https://trimmr.dev/" + response.id); // Assuming the response has a shortUrl property
                   } catch (error) {
                     console.error("Error trimming URL:", error);
                     // You might want to handle errors by showing a message to the user
@@ -83,11 +86,23 @@ export default function Home() {
                 {trimmedUrl}
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex gap-1 cursor-pointer" onClick={() => {navigator.clipboard.writeText(trimmedUrl)}}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex gap-1 cursor-pointer"
+                  onClick={() => {
+                    navigator.clipboard.writeText(trimmedUrl);
+                  }}
+                >
                   <Copy className="h-4 w-4" />
                   <span className="hidden sm:inline">Copy</span>
                 </Button>
-                <Button variant="outline" size="sm" className="flex gap-1 cursor-pointer" onClick={() => (window.location.href = `${trimmedUrl}`)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex gap-1 cursor-pointer"
+                  onClick={() => (window.location.href = `${trimmedUrl}`)}
+                >
                   <ExternalLink className="h-4 w-4" />
                   <span className="hidden sm:inline">Visit</span>
                 </Button>
@@ -97,7 +112,7 @@ export default function Home() {
         </Card>
       </div>
 
-      <footer className="mt-16 py-6 border-t bg-slate-50 dark:bg-slate-900">
+      <footer className="mt-4 py-6 border-t bg-slate-50 dark:bg-slate-900">
         <div className="container max-w-5xl mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>© 2025 Trimmr. All rights reserved.</p>
           <div className="flex justify-center gap-4 mt-2">
