@@ -146,6 +146,8 @@ export default function Home() {
               Contact
             </a>
           </div>
+
+          <p className="mt-2">Made with ❤️ by <span className="underline hover:text-teal-500"><a href="https://linkedin.com/in/noahwhlim">Noah Lim</a></span></p>
         </div>
       </footer>
     </div>
