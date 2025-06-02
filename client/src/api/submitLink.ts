@@ -3,14 +3,6 @@ export interface GenerateResponse {
   original_url: string;
 }
 
-function isValidUrl(url: string): boolean {
-  try {
-    const parsed = new URL(url);
-    return ['http:', 'https:'].includes(parsed.protocol);
-  } catch (e) {
-    return false;
-  }
-}
 
 export async function submitLink(longUrl: string): Promise<GenerateResponse> {
   // clean url

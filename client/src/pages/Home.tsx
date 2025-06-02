@@ -15,11 +15,22 @@ import { submitLink } from "@/api/submitLink";
 export default function Home() {
   const [longUrl, setLongUrl] = useState("");
   const [trimmedUrl, setTrimmedUrl] = useState("trimmr.dev/short");
+  const [trimMessage, setTrimMessage] = useState("Trim");
 
   const handleInputChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setLongUrl(event.target.value);
+  };
+
+  const isValidUrl = (urlInput: string) => {
+    try {
+      new URL(urlInput);
+      return true;
+    } catch (_) {
+      console.log(_) // dumb console to get rid of _ never used error
+      return false;
+    }
   };
 
   return (
@@ -61,16 +72,24 @@ export default function Home() {
                 className="bg-teal-500 hover:bg-teal-600 cursor-pointer"
                 onClick={async (e) => {
                   e.preventDefault();
-                  try {
-                    const response = await submitLink(longUrl);
-                    setTrimmedUrl("https://trimmr.dev/" + response.id); // Assuming the response has a shortUrl property
-                  } catch (error) {
-                    console.error("Error trimming URL:", error);
-                    // You might want to handle errors by showing a message to the user
+
+                  if (isValidUrl(longUrl)) {
+                    try {
+                      const response = await submitLink(longUrl);
+                      setTrimmedUrl("https://trimmr.dev/" + response.id); // Assuming the response has a shortUrl property
+                    } catch (error) {
+                      console.error("Error trimming URL:", error);
+                      // You might want to handle errors by showing a message to the user
+                    }
+                  }
+                  else {
+                    setTrimMessage("Enter valid URL")
+                    setTimeout(() => {setTrimMessage("Trim")}, 3000);
+
                   }
                 }}
               >
-                Trim
+                {trimMessage}
               </Button>
             </form>
           </CardContent>
