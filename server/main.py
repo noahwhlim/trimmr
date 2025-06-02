@@ -82,6 +82,9 @@ async def generate(request: Request):
     if not long_url:
         return {"error": "long_url is required"}
     
+    if not long_url.startswith(("https://", "http://")):
+        long_url = "https://" + long_url
+    
     short = ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
     # while short exist in db, regenerate
     check_query = 'SELECT * FROM c WHERE c.id = "' + short + '"'
